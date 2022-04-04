@@ -1,0 +1,56 @@
+pub let fs = {
+    "entries": {
+        "usr": {
+            "entries": {
+                "bin": {
+                    "entries": {
+                        "bash" : {
+                            "content": fetch("bash-linux-x86_64"),
+                            "executable": true
+                        },
+                        "echo" : {
+                            "content": fetch("file:///usr/bin/echo"),
+                            "executable": true
+                        },
+                        "ls" : {
+                            "content": fetch("file:///usr/bin/ls"),
+                            "executable": true
+                        },
+                        "lsd" : {
+                            "content": fetch("lsd"),
+                            "executable": true
+                        }
+                    }
+                },
+                "lib": {
+                    "entries": {
+                        "libc.so.6" : {
+                            "content": fetch("file:///usr/lib/libc.so.6"),
+                            "executable": true
+                        },
+                        "libm.so.6" : {
+                            "content": fetch("file:///usr/lib/libm.so.6"),
+                            "executable": true
+                        },
+                        "libgcc_s.so.1" : {
+                            "content": fetch("file:///usr/lib/libgcc_s.so.1"),
+                            "executable": true
+                        },
+                        "libcap.so.2" : {
+                            "content": fetch("file:///usr/lib/libcap.so.2"),
+                            "executable": true
+                        }
+                    }
+                }
+            }
+        },
+        "lib64": {
+            "entries": {
+                "ld-linux-x86-64.so.2" : {
+                    "content": fetch("file:///lib64/ld-linux-x86-64.so.2"),
+                    "executable": true
+                }
+            }
+        }
+    }
+}
