@@ -1,0 +1,9 @@
+pub fn dir(entries) {
+    {"entries": entries}
+}
+pub fn file(content) {
+    {"content": content}
+}
+pub fn executable(content) {
+    {"content": content, "executable": true}
+}
