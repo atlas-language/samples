@@ -12,6 +12,14 @@ pub let fs = {
                             "content": fetch("binaries/echo"),
                             "executable": true
                         },
+                        "whoami" : {
+                            "content": fetch("binaries/whoami"),
+                            "executable": true
+                        },
+                        "cat" : {
+                            "content": fetch("binaries/cat"),
+                            "executable": true
+                        },
                         "ls" : {
                             "content": fetch("binaries/ls"),
                             "executable": true
@@ -49,6 +57,16 @@ pub let fs = {
                 "ld-linux-x86-64.so.2" : {
                     "content": fetch("libs/ld-linux-x86-64.so.2"),
                     "executable": true
+                }
+            }
+        },
+        "etc": {
+            "entries": {
+                "passwd": {
+                    "content": "root:x:0:0::/root:/bin/bash"
+                },
+                "group": {
+                    "content": "root:x:0:root"
                 }
             }
         }
