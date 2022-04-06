@@ -1,74 +1,35 @@
-pub let fs = {
-    "entries": {
-        "usr": {
-            "entries": {
-                "bin": {
-                    "entries": {
-                        "bash" : {
-                            "content": fetch("binaries/bash"),
-                            "executable": true
-                        },
-                        "echo" : {
-                            "content": fetch("binaries/echo"),
-                            "executable": true
-                        },
-                        "whoami" : {
-                            "content": fetch("binaries/whoami"),
-                            "executable": true
-                        },
-                        "cat" : {
-                            "content": fetch("binaries/cat"),
-                            "executable": true
-                        },
-                        "ls" : {
-                            "content": fetch("binaries/ls"),
-                            "executable": true
-                        },
-                        "lsd" : {
-                            "content": fetch("binaries/lsd"),
-                            "executable": true
-                        }
-                    }
-                },
-                "lib": {
-                    "entries": {
-                        "libc.so.6" : {
-                            "content": fetch("libs/libc.so.6"),
-                            "executable": true
-                        },
-                        "libm.so.6" : {
-                            "content": fetch("libs/libm.so.6"),
-                            "executable": true
-                        },
-                        "libgcc_s.so.1" : {
-                            "content": fetch("libs/libgcc_s.so.1"),
-                            "executable": true
-                        },
-                        "libcap.so.2" : {
-                            "content": fetch("libs/libcap.so.2"),
-                            "executable": true
-                        }
-                    }
-                }
-            }
-        },
-        "lib64": {
-            "entries": {
-                "ld-linux-x86-64.so.2" : {
-                    "content": fetch("libs/ld-linux-x86-64.so.2"),
-                    "executable": true
-                }
-            }
-        },
-        "etc": {
-            "entries": {
-                "passwd": {
-                    "content": "root:x:0:0::/root:/bin/bash"
-                },
-                "group": {
-                    "content": "root:x:0:root"
-                }
-            }
-        }
-    }
+let utils = import("util.at")
+let dir = utils.dir
+let file = utils.file
+let executable = utils.executable
+
+pub let fs = dir({
+    "usr": dir({
+        "bin": dir({
+            "bash" : executable(fetch("bin/bash")),
+            "ls" : executable(fetch("bin/ls")),
+            "mkdir" : executable(fetch("bin/mkdir")),
+            "lsd" : executable(fetch("bin/lsd")),
+            "whoami" : executable(fetch("bin/whoami")),
+            "echo" : executable(fetch("bin/echo")),
+            "cat" : executable(fetch("bin/cat")),
+        }),
+        "lib": dir({
+            "libc.so.6" : executable(fetch("libs/libc.so.6")),
+            "libm.so.6" : executable(fetch("libs/libm.so.6")),
+            "libgcc_s.so.1" : executable(fetch("libs/libgcc_s.so.1")),
+            "libcap.so.2" : executable(fetch("libs/libcap.so.2")),
+        })
+    }),
+    "lib64": dir({
+        "ld-linux-x86-64.so.2" : executable(fetch("libs/ld-linux-x86-64.so.2")),
+    }),
+    "etc": dir({
+        "passwd": file("root:x:0:0::/root:/bin/bash"),
+        "group": file("root:x:0:root")
+    })
+})
+
+pub fn shell() {
+    exec(fs, "/", "/usr/bin/bash", [])
 }
