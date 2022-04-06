@@ -1,0 +1,62 @@
+let utils = import("util.at")
+let dir = utils.dir
+let file = utils.file
+let executable = utils.executable
+
+let include_fs = import("glibc_includes.at").fs
+let gcc_include_fs = import("gcc_includes.at").fs
+
+pub let fs = dir({
+    "usr": dir({
+        "bin": dir({
+            "gcc": executable(fetch("gcc/gcc")),
+            "bash": executable(fetch("bin/bash")),
+            "ls": executable(fetch("bin/ls")),
+            "ld": executable(fetch("gcc/ld")),
+            "as": executable(fetch("gcc/as")),
+        }),
+        "lib": dir({
+            "ld-linux-x86-64.so.2": executable(fetch("libs/ld-linux-x86-64.so.2")),
+            "libc.so": executable(fetch("libs/libc.so.6")),
+            "libc.so.6": executable(fetch("libs/libc.so.6")),
+            "libm.so": executable(fetch("libs/libm.so.6")),
+            "libm.so.6": executable(fetch("libs/libm.so.6")),
+            "libcap.so.2": executable(fetch("libs/libcap.so.2")),
+            "libpthread.so.0": executable(fetch("libs/libpthread.so.0")),
+
+            "libbfd-2.38.so": executable(fetch("libs/libbfd-2.38.so")),
+            "libopcodes-2.38.so": executable(fetch("libs/libopcodes-2.38.so")),
+
+            "libctf.so.0": executable(fetch("libs/libctf.so.0")),
+            "libgcc_s.so": executable(fetch("libs/libgcc_s.so.1")),
+            "libgcc_s.so.1": executable(fetch("libs/libgcc_s.so.1")),
+
+            "crti.o": file(fetch("gcc/crti.o")),
+            "crtn.o": file(fetch("gcc/crtn.o")),
+            "Scrt1.o": file(fetch("gcc/Scrt1.o")),
+
+            "libisl.so.23": executable(fetch("libs/libisl.so.23")),
+            "libmpc.so.3": executable(fetch("libs/libmpc.so.3")),
+            "libmpfr.so.6": executable(fetch("libs/libmpfr.so.6")),
+            "libgmp.so.10": executable(fetch("libs/libgmp.so.10")),
+            "libz.so.1": executable(fetch("libs/libz.so.1")),
+            "libzstd.so.1": executable(fetch("libs/libzstd.so.1")),
+            "gcc": dir({
+                "x86_64-pc-linux-gnu": dir({
+                    "11.2.0": dir({
+                        "cc1": executable(fetch("gcc/cc1")),
+                        "crtbeginS.o" : file(fetch("gcc/crtbeginS.o")),
+                        "crtendS.o" : file(fetch("gcc/crtendS.o")),
+                        "libgcc.a" : file(fetch("gcc/libgcc.a")),
+                        "liblto_plugin.so": executable(fetch("gcc/liblto_plugin.so")),
+                        "include": gcc_include_fs
+                    })
+                })
+            })
+        }),
+        "include": include_fs
+    }),
+    "lib64": dir({
+        "ld-linux-x86-64.so.2": executable(fetch("libs/ld-linux-x86-64.so.2"))
+    })
+});

@@ -3,54 +3,20 @@ let dir = utils.dir
 let file = utils.file
 let executable = utils.executable
 
-pub fn compile(input_file) {
-    let fs = dir({
-        "usr": dir({
-            "bin": dir({
-                "gcc": executable(fetch("bin/gcc")),
-                "bash": executable(fetch("bin/bash")),
-                "ls": executable(fetch("bin/ls")),
-                "ld": executable(fetch("bin/ld")),
-                "as": executable(fetch("bin/as")),
-            }),
-            "lib": dir({
-                "libc.so.6": executable(fetch("libs/libc.so.6")),
-                "libm.so.6": executable(fetch("libs/libm.so.6")),
-                "libcap.so.2": executable(fetch("libs/libcap.so.2")),
-                "libpthread.so.0": executable(fetch("libs/libpthread.so.0")),
+let support_fs = import("gcc_support_fs.at").fs
 
-                "libbfd-2.38.so": executable(fetch("libs/libbfd-2.38.so")),
-                "libopcodes-2.38.so": executable(fetch("libs/libopcodes-2.38.so")),
+pub fn gcc(args, workspace) {
+    let fs = dir(insert(support_fs.entries, "workspace", workspace));
+    let output = exec(fs, "/workspace", "/usr/bin/gcc", args);
+    output
+}
 
-                "libctf.so.0": executable(fetch("libs/libctf.so.0")),
+pub fn compile(source) {
+    gcc(["-o", "main", "main.c"], dir({"main.c": file(source)})).entries.workspace.entries.main.content
+}
 
-                "crti.o": file(fetch("gcc/crti.o")),
-                "Scrt1.o": file(fetch("gcc/Scrt1.o")),
-
-                "libisl.so.23": executable(fetch("libs/libisl.so.23")),
-                "libmpc.so.3": executable(fetch("libs/libmpc.so.3")),
-                "libmpfr.so.6": executable(fetch("libs/libmpfr.so.6")),
-                "libgmp.so.10": executable(fetch("libs/libgmp.so.10")),
-                "libz.so.1": executable(fetch("libs/libz.so.1")),
-                "libzstd.so.1": executable(fetch("libs/libzstd.so.1")),
-                "gcc": dir({
-                    "x86_64-pc-linux-gnu": dir({
-                        "11.2.0": dir({
-                            "cc1": executable(fetch("gcc/cc1")),
-                            "liblto_plugin.so": executable(fetch("gcc/liblto_plugin.so"))
-                        })
-                    })
-                })
-            }),
-            "include": dir({
-                "stdc-predef.h": file(fetch("include/stdc-predef.h"))
-            })
-        }),
-        "lib64": dir({
-            "ld-linux-x86-64.so.2": executable(fetch("libs/ld-linux-x86-64.so.2"))
-        }),
-        "input.c": file(input_file)
-    });
-    let output = exec(fs, "/", "/usr/bin/gcc", ["input.c"]);
+pub fn run_with_libc(file, args) {
+    let fs = dir(insert(support_fs.entries, "main", executable(file)));
+    let output = exec(fs, "/", "/main", args);
     output
 }

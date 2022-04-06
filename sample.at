@@ -1,0 +1,7 @@
+let gcc = import("gcc.at")
+
+pub let executable = gcc.compile(fetch("sample.c"))
+
+pub fn run() {
+    gcc.run_with_libc(executable, [])
+}
